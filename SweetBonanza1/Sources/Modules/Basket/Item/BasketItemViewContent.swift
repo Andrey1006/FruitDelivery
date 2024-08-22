@@ -11,14 +11,14 @@ struct BasketItemViewContent: Hashable {
     let id: String
     let image: String
     let title: String
-    let subtitle: String
+    let price: String
     let count: Int
 
-    init(id: String, image: String, title: String, subtitle: String, count: Int) {
+    init(id: String, image: String, title: String, price: String, count: Int) {
         self.id = id
         self.image = image
         self.title = title
-        self.subtitle = subtitle
+        self.price = price
         self.count = count
     }
     
@@ -30,7 +30,7 @@ struct BasketItemViewContent: Hashable {
         return lhs.id == rhs.id &&
             lhs.image == rhs.image &&
             lhs.title == rhs.title &&
-            lhs.subtitle == rhs.subtitle &&
+            lhs.price == rhs.price &&
             lhs.count == rhs.count
     }
 }

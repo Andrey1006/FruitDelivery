@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseCore
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
+        
+        
+        let authService: AuthService = .init()
+        
+        _ = SessionManager.shared
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//            authService.logout()
+////            authService.deleteUserAccount { result in
+//                Task { @MainActor in
+////                    try? await authService.register(
+////                        email: "andrey@gmail.com",
+////                        password: "qwerty12345",
+////                        name: "Andrey And123"
+////                    )
+//                    
+//                    try? await authService.login(email: "andrey@gmail.com", password: "qwerty12345")
+//                }
+////            }
+//        }
+        
         return true
     }
 

@@ -36,7 +36,7 @@ final class MainTabBarViewController: UIViewController, Containerable {
     private lazy var stackView: UIStackView = {
         let result: UIStackView = .init()
         result.distribution = .fillEqually
-        result.spacing = 24
+        result.spacing = view.bounds.width / 14
         
         result.translatesAutoresizingMaskIntoConstraints = false
         return result
@@ -52,6 +52,7 @@ final class MainTabBarViewController: UIViewController, Containerable {
     private lazy var mainButton: UIButton = {
         let result: UIButton = .init()
         result.setImage(.init(named: "apple"), for: .normal)
+        result.imageView?.contentMode = .scaleAspectFit
         result.addTarget(self, action: #selector(didTapOnMainButton), for: .touchUpInside)
         result.translatesAutoresizingMaskIntoConstraints = false
         
@@ -61,19 +62,21 @@ final class MainTabBarViewController: UIViewController, Containerable {
     private lazy var basketButton: UIButton = {
         let result: UIButton = .init()
         result.setImage(.init(named: "cart"), for: .normal)
+        result.imageView?.contentMode = .scaleAspectFit
         result.addTarget(self, action: #selector(didTapOnBasketButton), for: .touchUpInside)
         result.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate([
-            result.heightAnchor.constraint(equalToConstant: 10),
-            result.widthAnchor.constraint(equalToConstant: 10)
-        ])
+//        NSLayoutConstraint.activate([
+//            result.heightAnchor.constraint(equalToConstant: 10),
+//            result.widthAnchor.constraint(equalToConstant: 10)
+//        ])
         return result
     }()
     
     private lazy var favoritesButton: UIButton = {
         let result: UIButton = .init()
         result.setImage(.init(named: "heart"), for: .normal)
+        result.imageView?.contentMode = .scaleAspectFit
         result.addTarget(self, action: #selector(didTapOnFavoriteButton), for: .touchUpInside)
         result.translatesAutoresizingMaskIntoConstraints = false
         
@@ -83,6 +86,7 @@ final class MainTabBarViewController: UIViewController, Containerable {
     private lazy var accountButton: UIButton = {
         let result: UIButton = .init()
         result.setImage(.init(named: "like"), for: .normal)
+        result.imageView?.contentMode = .scaleAspectFit
         result.addTarget(self, action: #selector(didTapOnAccountButton), for: .touchUpInside)
         result.translatesAutoresizingMaskIntoConstraints = false
         
@@ -93,26 +97,17 @@ final class MainTabBarViewController: UIViewController, Containerable {
         return MainViewController.instantiate()
     }()
     
-    lazy var basketViewController: UINavigationController = {
-        let rootViewController: UIHostingController<BasketView> = BasketView.buildModule(items: [])
-        let navigationController: UINavigationController = .init(rootViewController: rootViewController)
-        navigationController.navigationBar.isHidden = true
-
-        return navigationController
+    lazy var basketViewController: UIViewController = {
+        return BasketScreen.buildModule(items: [])
     }()
     
     lazy var favoritesViewController: FavoritesViewController = {
         return FavoritesViewController.instantiate()
-        // MARK: - Navigation for swiftUI
-//        let rootViewController: UIHostingController<FavoritesView> = FavoritesView.buildModule()
-//        let navigationController: UINavigationController = .init(rootViewController: rootViewController)
-//        navigationController.navigationBar.isHidden = true
-//        
-//        return navigationController
     }()
     
-    lazy var accountViewController: UIHostingController<AccountView> = {
-        return UIHostingController(rootView: AccountView(content: .init(id: "4", image: "orange", name: "name", email: "email@gmail.com")))
+    lazy var accountViewController: UIViewController = {
+        let currentUser = SessionManager.shared.currentUser
+        return AccountScreen.buildModule(id: currentUser?.id ?? "", name: currentUser?.name ?? "NAME...", email: currentUser?.email ?? "EMAIL...")
     }()
     
     var currentViewController: UIViewController!
@@ -220,19 +215,3 @@ private extension MainTabBarViewController {
         }
     }
 }
-
-//extension UIViewController {
-//    var tabBarHeight: CGFloat {
-//        var currentParent: UIViewController? = parent
-//        
-//        while let wrappedParent = currentParent {
-//            if wrappedParent is MainTabBarViewController {
-//                return Layout.tabBarBaseHeight
-//            }
-//            
-//            currentParent = wrappedParent.parent
-//        }
-//        
-//        return 0
-//    }
-//}

@@ -8,11 +8,11 @@
 import UIKit
 import SwiftUI
 
-extension BasketView {
-    static func buildModule(items: [BasketItemViewContent]) -> UIHostingController<BasketView> {
+extension BasketScreen {
+    static func buildModule(items: [BasketItemViewContent]) -> UIHostingController<BasketScreen> {
         let viewModel: BasketViewModel = .init(items: items)
-        let view: BasketView = .init(viewModel: viewModel)
-        let viewController: UIHostingController<BasketView> = .init(rootView: view)
+        let view: BasketScreen = .init(viewModel: viewModel)
+        let viewController: UIHostingController<BasketScreen> = .init(rootView: view)
         viewModel.router = BasketRouter(viewController: viewController)
         
         return viewController
@@ -32,10 +32,9 @@ final class BasketRouter: BasketRouterInput {
     }
     
     func continueButtonClicked() {
-//        let productDetails: UIViewController = .init()
-        let placingOrderView = UIHostingController(rootView: PlacingOrderView(content: .init(id: "1")))
-
-        viewController?.navigationController?.pushViewController(placingOrderView, animated: true)
+        let placingOrderScreen: UIHostingController<PlacingOrderScreen> = PlacingOrderScreen.buildModule()
+        
+        viewController?.navigationController?.pushViewController(placingOrderScreen, animated: false)
     }
     
     func selectProductButtonClicked() {

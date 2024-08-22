@@ -1,5 +1,5 @@
 //
-//  ThankYouPageViewContent.swift
+//  ThankYouPageViewModel.swift
 //  SweetBonanza1
 //
 //  Created by Андрей Сторожко on 14.08.2024.
@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct ThankYouPageViewContent: Hashable {
+final class ThankYouPageViewModel {
+    var router: ThankYouPageRouterInput!
+    
     let id: String
     let image: String
     let title: String
@@ -18,13 +20,15 @@ struct ThankYouPageViewContent: Hashable {
         self.title = title
     }
     
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-    public static func == (lhs: ThankYouPageViewContent, rhs: ThankYouPageViewContent) -> Bool {
+    public static func == (lhs: ThankYouPageViewModel, rhs: ThankYouPageViewModel) -> Bool {
         return lhs.id == rhs.id &&
             lhs.image == rhs.image &&
             lhs.title == rhs.title
+    }
+}
+
+extension ThankYouPageViewModel {
+    func okButtonClicked() {
+        router.okButtonClicked()
     }
 }

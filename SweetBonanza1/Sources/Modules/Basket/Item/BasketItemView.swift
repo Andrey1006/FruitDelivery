@@ -10,20 +10,25 @@ import SwiftUI
 struct BasketItemView: View {
     // MARK: - Setup
     public typealias Content = BasketItemViewContent
+    private var memoryDataBase: MemoryDataBase = .shared
     
     private var content: Content
-    private var action: (() -> Void)?
+    private var onPlusTap: (() -> Void)?
+    private var onMinusTap: (() -> Void)?
+    private var onCloseTap: (() -> Void)?
     
-    init(content: Content, action: (() -> Void)? = nil) {
+    init(content: Content, onPlusTap: (() -> Void)? = nil, onMinusTap: (() -> Void)? = nil, onCloseTap: (() -> Void)? = nil) {
         self.content = content
-        self.action = action
+        self.onPlusTap = onPlusTap
+        self.onMinusTap = onMinusTap
+        self.onCloseTap = onCloseTap
     }
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-//            Image(content.image)
-            Image("orange")
+            Image(content.image)
                 .resizable()
+                .scaledToFit()
                 .frame(width: 80, height: 80)
                 .padding(12)
                 .background(
@@ -46,10 +51,13 @@ struct BasketItemView: View {
                     Image("close")
                         .resizable()
                         .frame(width: 20, height: 20)
-                    
+                        .onTapGesture {
+                            print("delete")
+                            onCloseTap?()
+                        }
                 }
-                HStack {
-                    Text(content.subtitle)
+                HStack(spacing: 16) {
+                    Text(content.price)
                     Image("dimond")
                         .resizable()
                         .frame(width: 25, height: 25)
@@ -58,7 +66,7 @@ struct BasketItemView: View {
 
                 HStack(alignment: .center, spacing: 16) {
                     Button(action: {
-                        action?()
+                        onPlusTap?()
                     }, label: {
                         Image("plus")
                             .resizable()
@@ -72,7 +80,7 @@ struct BasketItemView: View {
                     Text(String(content.count))
                         .font(.title)
                     Button(action: {
-                        action?()
+                        onMinusTap?()
                     }, label: {
                         Image("minus")
                             .resizable()
@@ -85,7 +93,7 @@ struct BasketItemView: View {
                 }
                 .padding(.top, 16)
                 Rectangle()
-                    .frame(height: 4) // Высота полоски
+                    .frame(height: 4)
                     .foregroundColor(.gray)
             }
             
@@ -96,7 +104,7 @@ struct BasketItemView: View {
 }
 
 #Preview {
-    BasketItemView(content: .init(id: "1", image: "plus", title: "KIWI", subtitle: "3", count: 2)) {
+    BasketItemView(content: .init(id: "1", image: "plus", title: "KIWI", price: "3", count: 2)) {
         print("OnboardingView")
     }
 }

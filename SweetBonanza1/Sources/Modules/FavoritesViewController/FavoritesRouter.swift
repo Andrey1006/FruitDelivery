@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol FavoritesRouterProtocol {
-//    func pushToDetailProduct(modulePayload: SetDetailsModulePayload)
+    func pushToDetailProduct(product: ProductDomainModel)
+    func pushToBasket()
 }
 
 class FavoritesRouter: FavoritesRouterProtocol {
@@ -18,9 +20,13 @@ class FavoritesRouter: FavoritesRouterProtocol {
         self.viewController = viewController
     }
     
-//    func pushToDetailSet(modulePayload: SetDetailsModulePayload) {
-//        let setDetailsViewController: SetDetailsViewController = .instantiate(modulePayload: modulePayload)
-//
-//        viewController.navigationController?.pushViewController(setDetailsViewController, animated: true)
-//    }
+    func pushToDetailProduct(product: ProductDomainModel) {
+        let rootViewController: UIHostingController<ProductDetailsScreen> = ProductDetailsScreen.buildModule(product: .init(id: product.id.uuidString, title: product.title, image: product.image, price: String(product.price), isFavorite: product.isFavorite, description: product.descriptions))
+        
+        viewController?.navigationController?.pushViewController(rootViewController, animated: true)
+    }
+    
+    func pushToBasket() {
+        viewController.mainTabBarController?.openTab(kind: .basket)
+    }
 }

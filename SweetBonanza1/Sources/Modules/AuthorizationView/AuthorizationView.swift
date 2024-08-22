@@ -9,30 +9,29 @@ import SwiftUI
 
 struct AuthorizationView: View {
     // MARK: - Setup
-    private var viewModel: AuthorizationViewModel
+    @ObservedObject private var viewModel: AuthorizationViewModel
     
     init(viewModel: AuthorizationViewModel) {
         self.viewModel = viewModel
     }
     
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var showingAlert = false
     
 
     var body: some View {
-//        ZStack {
-            
-//            Image("background")
-//                .resizable()
-//                .ignoresSafeArea()
-//                .scaledToFill()
             VStack(spacing: 20) {
-                MainTextField(text: $email, placeholder: "EMAIL...")
+                MainTextField(text: $viewModel.email, placeholder: "EMAIL...")
                     .keyboardType(.emailAddress)
-                MainTextField(text: $password, placeholder: "PASSWORD...")
+//                MainTextField(text: $viewModel.password, placeholder: "PASSWORD...")
+                SecureTextField(text: $viewModel.password, placeholder: "PASSWORD...")
                 
                 MainButton(text: "SIGN IN", fontPalette: .sign, layout: .sign) {
-                    viewModel.signInButtonClicked()
+//                    viewModel.signInButtonClicked()
+                    if isFormValid {
+                        viewModel.signInButtonClicked()
+                    } else {
+                        showingAlert = true
+                    }
                 }
                 .padding(.top, 8)
                 Spacer()
@@ -52,10 +51,22 @@ struct AuthorizationView: View {
                     .edgesIgnoringSafeArea(.all)
                     .scaledToFill()
             )
+            .onDisappear {
+                viewModel.clearState()
+            }
 //        }
     }
 }
 
+extension AuthorizationView: AuthViewModelProtocol {
+    var isFormValid: Bool {
+        return viewModel.email.isNotEmpty
+        && viewModel.email.contains("@")
+        && viewModel.password.isNotEmpty
+        && viewModel.password.count > 5
+    }
+}
+
 #Preview {
-    AuthorizationView(viewModel: .init(name: "123"))
+    AuthorizationView(viewModel: .init(email: "123", password: "123") )
 }
