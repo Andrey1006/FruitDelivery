@@ -1,5 +1,5 @@
 //
-//  ProductDetailsViewContent .swift
+//  ProductDetailsViewModel .swift
 //  SweetBonanza1
 //
 //  Created by Андрей Сторожко on 14.08.2024.
@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct ProductDetailsViewContent: Hashable {
+final class ProductDetailsViewModel: Hashable {
+    var router: ProductDetailsRouterInput!
     let id: String
     let title: String
     let image: String
@@ -28,7 +29,7 @@ struct ProductDetailsViewContent: Hashable {
         hasher.combine(id)
     }
     
-    public static func == (lhs: ProductDetailsViewContent, rhs: ProductDetailsViewContent) -> Bool {
+    public static func == (lhs: ProductDetailsViewModel, rhs: ProductDetailsViewModel) -> Bool {
         return lhs.id == rhs.id &&
             lhs.title == rhs.title &&
             lhs.image == rhs.image &&

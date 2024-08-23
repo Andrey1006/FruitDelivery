@@ -16,17 +16,35 @@ final class MemoryDataBase {
     
     func appendToBasket(product: ProductDomainModel) {
         if productsInBasket.contains(where: { $0.item.id == product.id }) {
-            changeCount(for: product, delta: 1)
+            addCount(for: product, delta: 1)
         } else {
             productsInBasket.append(.init(item: product))
         }
     }
     
-    func changeCount(for product: ProductDomainModel, delta: Int) {
+    func removeFromBasketOneItem(product: ProductDomainModel) {
+        if productsInBasket.contains(where: { $0.item.id == product.id }) {
+            removeCount(for: product, delta: 1)
+        }
+    }
+    
+    func removeFromBasket(product: ProductDomainModel) {
+        productsInBasket.removeAll(where: { $0.item.id == product.id })
+    }
+    
+    func addCount(for product: ProductDomainModel, delta: Int) {
         guard let container = productsInBasket.first(where: { $0.item.id == product.id }) else {
             return
         }
         
         container.count += delta
+    }
+    
+    func removeCount(for product: ProductDomainModel, delta: Int) {
+        guard let container = productsInBasket.first(where: { $0.item.id == product.id }) else {
+            return
+        }
+        
+        container.count -= delta
     }
 }

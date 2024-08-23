@@ -7,22 +7,12 @@
 
 import SwiftUI
 
-extension Date {
-    func toString(_ format: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = format
-        return formatter.string(from: self)
-    }
-}
-
-struct PlacingOrderView: View {
+struct PlacingOrderScreen: View {
     // MARK: - Setup
-    public typealias Content = PlacingOrderViewContent
+    private var viewModel: PlacingOrderViewModel
     
-    private var content: Content
-    
-    init(content: Content) {
-        self.content = content
+    init(viewModel: PlacingOrderViewModel) {
+        self.viewModel = viewModel
     }
     
     @State private var name: String = ""
@@ -33,6 +23,11 @@ struct PlacingOrderView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            Button(action: {
+                
+            }, label: {
+                Text("BACK")
+            })
             MainTextField(text: $name, placeholder: "NAME...")
             MainTextField(text: $address, placeholder: "ADDRESS...")
             HStack(spacing: 8) {
@@ -64,7 +59,7 @@ struct PlacingOrderView: View {
                     )
                     .labelsHidden()
                     .datePickerStyle(.compact)
-//                Spacer()
+
                 Text(date.toString("HH:mm"))
                     .font(.title2)
                     .frame(maxWidth: .infinity)
@@ -94,23 +89,22 @@ struct PlacingOrderView: View {
                     .labelsHidden()
                     .datePickerStyle(.compact)
             }
-            .frame(maxWidth: .infinity)
+
             MainButton(text: "CONFIRM", fullWidth: true, fontPalette: .sign, layout: .regular) {
-                
+                viewModel.confirmButtonClicked()
             }
-            .foregroundColor(.white)
-            .padding(.bottom, 48)
         }
         .padding(.horizontal, 36)
+        .padding(.vertical, 230)
         .background(
             Image("background")
                 .resizable()
-                .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.all)
                 .scaledToFill()
         )
     }
 }
 
 #Preview {
-    PlacingOrderView(content: .init(id: "1"))
+    PlacingOrderScreen(viewModel: .init(id: "1"))
 }

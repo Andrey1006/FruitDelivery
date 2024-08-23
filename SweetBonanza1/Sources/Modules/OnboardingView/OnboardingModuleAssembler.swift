@@ -10,7 +10,7 @@ import SwiftUI
 
 extension OnboardingView {
     static func buildModule() -> UIHostingController<OnboardingView> {
-        var viewModel: OnboardingViewModel = .init(title: "DFJKHSJFHKDSJHSDFSJHKFDSJKDSJKSFJHKDHJKDFHJKDFSJKHFDSHKJS")
+        var viewModel: OnboardingViewModel = .init(title: "FRESH FRUIT TO YOUR TABLE. \n WIDE SELECTION, EXCELLENT QUALITY, FAST DELIVERY. \n ENJOY HEALTH WITH US!")
         let view: OnboardingView = .init(viewModel: viewModel)
         let viewController: UIHostingController<OnboardingView> = .init(rootView: view)
         viewModel.router = OnboardingRouter(viewController: viewController)

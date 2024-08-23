@@ -10,7 +10,8 @@ import Foundation
 protocol FavoritesPresenterProtocol {
     func viewDidLoad()
     func pushToDetailProduct(id: String)
-    func searchFieldUpdated(text: String)
+    func didTapOnOrderButton(id: String)
+    func didTapOnFavoriteButton(id: String)
 }
 
 class FavoritesPresenter {
@@ -20,6 +21,7 @@ class FavoritesPresenter {
     
     var productsStorage: ProductDomainModelStorage = .init()
     private var products: [ProductDomainModel] = []
+    private var memoryDataBase: MemoryDataBase = .shared
     
     init(view: FavoritesViewControllerProtocol!, router: FavoritesRouterProtocol, viewModel: FavoritesViewModel) {
         self.view = view
@@ -31,10 +33,6 @@ class FavoritesPresenter {
 
 
 extension FavoritesPresenter: FavoritesPresenterProtocol {
-    func searchFieldUpdated(text: String) {
-         
-    }
-    
     func viewDidLoad() {
         products = productsStorage.read()
         
@@ -55,15 +53,33 @@ extension FavoritesPresenter: FavoritesPresenterProtocol {
     }
     
     func pushToDetailProduct(id: String) {
-//        guard let set = sets.first(where: { $0.id.uuidString == id }) else {
-//            return
-//        }
-//
-//        router.pushToDetailSet(modulePayload: .init(set: set))
+        guard let product = products.first(where: { $0.id.uuidString == id }) else {
+            return
+        }
+        
+        router.pushToDetailProduct(product: .init(id: product.id, image: product.image, title: product.title, price: product.price, isFavorite: product.isFavorite, descriptions: product.descriptions))
     }
     
-    func pushToAllSets() {
-//        router.pushAllGeneratedSets()
+    func didTapOnOrderButton(id: String) {
+        guard let product = products.first(where: { $0.id.uuidString == id }) else {
+            return
+        }
+        
+        memoryDataBase.appendToBasket(product: product)
+        router.pushToBasket()
+    }
+    
+    func didTapOnFavoriteButton(id: String) {
+        guard var product = products.first(where: { $0.id.uuidString == id }) else {
+            return
+        }
+        var productIsFavorite: Bool = product.isFavorite
+        productIsFavorite.toggle()
+
+        product.isFavorite = productIsFavorite
+        productsStorage.store(item: product)
+        
+        viewDidLoad()
     }
 }
 

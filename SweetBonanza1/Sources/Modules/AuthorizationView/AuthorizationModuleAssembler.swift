@@ -10,7 +10,7 @@ import SwiftUI
 
 extension AuthorizationView {
     static func buildModule() -> UIHostingController<AuthorizationView> {
-        var viewModel: AuthorizationViewModel = .init(name: "123")
+        var viewModel: AuthorizationViewModel = .init()
         let view: AuthorizationView = .init(viewModel: viewModel)
         let viewController: UIHostingController<AuthorizationView> = .init(rootView: view)
         viewModel.router = AuthorizationRouter(viewController: viewController)
@@ -24,6 +24,7 @@ protocol AuthorizationRouterInput {
     func haveNotAccountClicked()
 }
 
+@MainActor
 final class AuthorizationRouter: AuthorizationRouterInput {
     weak var viewController: UIViewController?
     
@@ -36,9 +37,11 @@ final class AuthorizationRouter: AuthorizationRouterInput {
     }
     
     func haveNotAccountClicked() {
-        let productDetails: UIViewController = .init()
-        let registrationView = UIHostingController(rootView: RegistrationView(content: .init(id: "1")))
+        let rootViewController: UIHostingController<RegistrationScreen> = RegistrationScreen.buildModule()
+//        let navigationController: UINavigationController = .init(rootViewController: rootViewController)
+        
+//        let registrationView = UIHostingController(rootView: rootViewController.view)
 
-        viewController?.navigationController?.pushViewController(registrationView, animated: true)
+        viewController?.navigationController?.pushViewController(rootViewController, animated: true)
     }
 }

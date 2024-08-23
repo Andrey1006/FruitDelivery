@@ -73,7 +73,11 @@ extension UIViewController {
         var cursor: UIViewController? = parent
         
         while let parent = cursor {
-            if let tabBarViewController = parent as? MainTabBarViewController {
+            if let navigationController = parent as? UINavigationController,
+               let tabBarViewController = navigationController.viewControllers.first as? MainTabBarViewController {
+                return tabBarViewController
+            }
+            else if let tabBarViewController = parent as? MainTabBarViewController {
                 return tabBarViewController
             }
             

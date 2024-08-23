@@ -46,7 +46,8 @@ final class FavoritesViewModel {
     var currentPage: Int = 1
     
     func apply(collecitonViewSize: CGSize) {
-        cellSize = .init(
+        self.collecitonViewSize = collecitonViewSize
+        self.cellSize = .init(
             width: floor((collecitonViewSize.width - spacingBetweenItems) / 2),
             height: floor((collecitonViewSize.height - (spacingBetweenItems * 2)) / 3)
         )

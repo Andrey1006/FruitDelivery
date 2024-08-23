@@ -19,6 +19,7 @@ final class MainViewController: UIViewController {
     private lazy var backgroundImageView: UIImageView = {
         let result: UIImageView = .init()
         result.image = .init(named: "background")
+        result.contentMode = .scaleAspectFit
         
         result.translatesAutoresizingMaskIntoConstraints = false
         return result
@@ -40,7 +41,7 @@ final class MainViewController: UIViewController {
                         self?.viewModel.searchText ?? ""
                     },
                     set: { [weak self] newValue in
-                        self?.presenter.searchFieldUpdated1(data: newValue)
+                        self?.presenter.searchFieldUpdated(text: newValue)
                     }
                 ),
                 placeholder: "SEARCH..."
@@ -103,6 +104,11 @@ final class MainViewController: UIViewController {
             
             presenter.viewDidLoad()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.viewDidLoad()
     }
     
     // MARK: - Setup

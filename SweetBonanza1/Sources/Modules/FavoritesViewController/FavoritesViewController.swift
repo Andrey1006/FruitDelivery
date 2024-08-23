@@ -18,6 +18,7 @@ final class FavoritesViewController: UIViewController {
     private lazy var backgroundImageView: UIImageView = {
         let result: UIImageView = .init()
         result.image = .init(named: "background")
+        result.contentMode = .scaleAspectFit
         
         result.translatesAutoresizingMaskIntoConstraints = false
         return result
@@ -78,6 +79,11 @@ final class FavoritesViewController: UIViewController {
             
             presenter.viewDidLoad()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.viewDidLoad()
     }
     
     // MARK: - Setup
@@ -174,6 +180,14 @@ extension FavoritesViewController: UICollectionViewDelegate {
             cell.configure(as: ProductCollectionCell.self, with: viewModel) { cell in
                 cell.onTap = { [weak self] id in
                     self?.presenter.pushToDetailProduct(id: id)
+                }
+                
+                cell.onTapFavoriteButton = { [weak self] id in
+                    self?.presenter.didTapOnFavoriteButton(id: id)
+                }
+                
+                cell.onTapOrderButton = { [weak self] id in
+                    self?.presenter.didTapOnOrderButton(id: id)
                 }
             }
         }

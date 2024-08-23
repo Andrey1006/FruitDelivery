@@ -10,9 +10,8 @@ import UIKit
 import SwiftUI
 
 protocol MainRouterProtocol {
-//    func pushToDetailProduct(modulePayload: SetDetailsModulePayload)
+    func pushToDetailProduct(product: ProductDomainModel)
     func pushToBasket()
-    func pushToMain()
 }
 
 class MainRouter: MainRouterProtocol {
@@ -22,11 +21,13 @@ class MainRouter: MainRouterProtocol {
         self.viewController = viewController
     }
     
-    func pushToBasket() {
-        viewController.mainTabBarController?.openTab(kind: .basket)
+    func pushToDetailProduct(product: ProductDomainModel) {
+        let rootViewController: UIHostingController<ProductDetailsScreen> = ProductDetailsScreen.buildModule(product: .init(id: product.id.uuidString, title: product.title, image: product.image, price: String(product.price), isFavorite: product.isFavorite, description: product.descriptions))
+        
+        viewController?.navigationController?.pushViewController(rootViewController, animated: true)
     }
     
-    func pushToMain() {
-//        viewController.mainTabBarController?.openTab(kind: .main)
+    func pushToBasket() {
+        viewController.mainTabBarController?.openTab(kind: .basket)
     }
 }

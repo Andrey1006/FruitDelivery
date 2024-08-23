@@ -7,29 +7,28 @@
 
 import SwiftUI
 
-struct ProductDetailsView: View {
+struct ProductDetailsScreen: View {
     // MARK: - Setup
-    public typealias Content = ProductDetailsViewContent
+    private var viewModel: ProductDetailsViewModel
     
-    private var content: Content
-    
-    init(content: Content) {
-        self.content = content
+    init(viewModel: ProductDetailsViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
-    
         VStack(spacing: 8) {
-            Image(content.image)
+            Image(viewModel.image)
                 .resizable()
+                .scaledToFit()
+                .frame(width: 260, height: 260)
+                .padding(12)
                 .background(
                     Circle()
                         .fill(Color.init(uiColor: .init(red: 254, green: 248, blue: 234, alpha: 1)).opacity(0.5))
                 )
-                .padding(36)
             VStack(spacing: 8) {
                 HStack(spacing: 8) {
-                    Text(content.title)
+                    Text(viewModel.title)
                         .font(.title)
                         .bold()
                         .frame(maxWidth: .infinity)
@@ -39,14 +38,14 @@ struct ProductDetailsView: View {
 //                        }
                 }
                 .padding(.top, 16)
-                Text(content.price)
+                Text(viewModel.price)
                 
                 MainButton(text: "ORDER", fullWidth: true, fontPalette: .search, layout: .logOut) {
                     
                 }
                 .padding(.vertical, 8)
                 
-                Text(content.description)
+                Text(viewModel.description)
                     .padding(.horizontal, 36)
                     .padding(.bottom, 24)
             }
@@ -55,6 +54,7 @@ struct ProductDetailsView: View {
             .cornerRadius(24, corners: [.topLeft, .topRight])
             .ignoresSafeArea()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
             Image("background")
                 .resizable()
@@ -65,7 +65,7 @@ struct ProductDetailsView: View {
 }
 
 #Preview {
-    ProductDetailsView(content: .init(id: "1", title: "APPLE", image: "apple", price: "1234", isFavorite: false, description: "fjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfd"))
+    ProductDetailsScreen(viewModel: .init(id: "1", title: "APPLE", image: "apple", price: "1234", isFavorite: false, description: "fjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfdfjsjfdslhfjskdhshdfkhgkdfhgkjfshgskhgkfjfdsksjkfdsjklfdjsjlkdjkfsghsfdghkdssghgkjfd"))
 }
 
 extension View {

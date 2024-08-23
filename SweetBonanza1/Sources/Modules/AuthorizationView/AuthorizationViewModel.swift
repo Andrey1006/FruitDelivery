@@ -7,22 +7,44 @@
 
 import Foundation
 
-final class AuthorizationViewModel {
-    var router: AuthorizationRouterInput!
-    let name: String
+final class AuthorizationViewModel: ObservableObject {
+    @Published var email: String
+    @Published var password: String
     
-    init(name: String) {
-        self.name = name
+    private var authService: AuthService = .init()
+    var router: AuthorizationRouterInput!
+    
+    init(email: String = "", password: String = "") {
+        self.email = email
+        self.password = password
     }
     
     public static func == (lhs: AuthorizationViewModel, rhs: AuthorizationViewModel) -> Bool {
-        return lhs.name == rhs.name
+        return lhs.email == rhs.email &&
+            lhs.password == rhs.password
     }
 }
 
 extension AuthorizationViewModel {
     func signInButtonClicked() {
-        router.signInButtonClicked()
+        Task {
+            let isSuccess = try await authService.login(email: email, password: password)
+            
+            if isSuccess {
+                await MainActor.run {
+                    router.signInButtonClicked()
+                }
+            } else {
+                //
+                print("Invalid log or password")
+            }
+        }
+        
+    }
+    
+    func clearState() {
+        email = ""
+        password = ""
     }
     
     func haveNotAccountClicked() {

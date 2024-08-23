@@ -1,8 +1,8 @@
 //
 //  UIDevice + Extension.swift
-//  AmericanFootballTraining
+//  SweetBonanza1
 //
-//  Created by Андрей Сторожко on 04.06.2024.
+//  Created by Андрей Сторожко on 14.08.2024.
 //
 
 import UIKit

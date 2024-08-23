@@ -13,8 +13,6 @@ protocol MainPresenterProtocol {
     func searchFieldUpdated(text: String)
     func didTapOnOrderButton(id: String)
     func didTapOnFavoriteButton(id: String)
-    
-    func searchFieldUpdated1(data: String)
 }
 
 class MainPresenter {
@@ -36,21 +34,8 @@ class MainPresenter {
 
 
 extension MainPresenter: MainPresenterProtocol {
-
     func viewDidLoad() {
         reloadData()
-//        products = productsStorage.read()
-//        
-//        viewModel.dataSource.inject(
-//            section: .init(
-//                id: .productCell,
-//                items: products.compactMap { makeCellViewModel(for: $0, size: viewModel.cellSize) },
-//                interitemSpacing: viewModel.spacingBetweenItems,
-//                lineSpacing: viewModel.spacingBetweenItems
-//            )
-//        )
-//        
-//        view.reloadDataSource()
     }
     
     func pushToDetailProduct(id: String) {
@@ -58,7 +43,7 @@ extension MainPresenter: MainPresenterProtocol {
             return
         }
         
-//        router.pushToDetailSet(modulePayload: .init(product: product))
+        router.pushToDetailProduct(product: .init(id: product.id, image: product.image, title: product.title, price: product.price, isFavorite: product.isFavorite, descriptions: product.descriptions))
     }
     
     func didTapOnOrderButton(id: String) {
@@ -86,11 +71,7 @@ extension MainPresenter: MainPresenterProtocol {
     func searchFieldUpdated(text: String) {
         guard viewModel.searchText != text else { return }
         viewModel.searchText = text
-        print("New text \(text)")
-    }
-    
-    func searchFieldUpdated1(data: String) {
-        reloadData(searchProduct: data) //обновление экрана
+        reloadData(searchProduct: text)
     }
 }
 

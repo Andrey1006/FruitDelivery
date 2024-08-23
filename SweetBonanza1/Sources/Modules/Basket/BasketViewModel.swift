@@ -20,13 +20,13 @@ final class BasketViewModel: ObservableObject {
 }
 
 extension BasketViewModel {
-    func viewAppear() {
+    func reloadDataSource() {
         items = memoryDataBase.productsInBasket.map { itemWithCount in
             return BasketItemViewContent(
                 id: itemWithCount.item.id.uuidString,
                 image: itemWithCount.item.image,
                 title: itemWithCount.item.title,
-                subtitle: itemWithCount.item.descriptions,
+                price: itemWithCount.item.descriptions,
                 count: itemWithCount.count
             )
         }
@@ -38,5 +38,35 @@ extension BasketViewModel {
     
     func selectProductButtonClicked() {
         router.selectProductButtonClicked()
+    }
+    
+    func itemPlusButtonClicked(item: BasketItemViewContent) {
+        let uuid = UUID(uuidString: item.id)
+        
+        if let uuid {
+            memoryDataBase.appendToBasket(product: .init(id: uuid, image: item.image, title: item.title, price: Int(item.price) ?? 0, isFavorite: false, descriptions: item.price))
+        }
+        
+        reloadDataSource()
+    }
+    
+    func itemMinusButtonClicked(item: BasketItemViewContent) {
+        let uuid = UUID(uuidString: item.id)
+        
+        if let uuid {
+            memoryDataBase.removeFromBasketOneItem(product: .init(id: uuid, image: item.image, title: item.title, price: Int(item.price) ?? 0, isFavorite: false, descriptions: item.price))
+        }
+        
+        reloadDataSource()
+    }
+    
+    func itemCloseButtonClicked(item: BasketItemViewContent) {
+        let uuid = UUID(uuidString: item.id)
+        
+        if let uuid {
+            memoryDataBase.removeFromBasket(product: .init(id: uuid, image: item.image, title: item.title, price: Int(item.price) ?? 0, isFavorite: false, descriptions: item.price))
+        }
+        
+        reloadDataSource()
     }
 }

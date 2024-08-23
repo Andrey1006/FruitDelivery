@@ -1,5 +1,5 @@
 //
-//  AccountView.swift
+//  AccountScreen.swift
 //  SweetBonanza1
 //
 //  Created by Андрей Сторожко on 14.08.2024.
@@ -8,18 +8,14 @@
 import SwiftUI
 import WebKit
 
-struct AccountView: View {
-    // MARK: - Setup
-    public typealias Content = AccountViewContent
-    
-    private var content: Content
-    private var action: (() -> Void)?
+struct AccountScreen: View {
+    // MARK: - Setu
+    private var viewModel: AccountViewModel
     
     @State private var isPresentWebView = false
     
-    init(content: Content, action: (() -> Void)? = nil) {
-        self.content = content
-        self.action = action
+    init(viewModel: AccountViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -37,11 +33,21 @@ struct AccountView: View {
     var contentView: some View {
         VStack() {
             HStack(spacing: 24) {
-                Image(content.image)
+                Image("userProfile")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
-                VStack(alignment: .leading, spacing: 24) {
-                    CounterView(text: "NAME...", layout: .main)
-                    CounterView(text: "EMAIL...", layout: .main)
+                    .clipShape(Circle())
+                    .shadow(color: .gray, radius: 3, x: 2, y: 2)
+                    .background(
+                        Circle()
+                            .fill(Color.init(uiColor: .init(red: 20, green: 46, blue: 7, alpha: 1)))
+                            .frame(width: 140, height: 140)
+                    )
+
+                VStack(alignment: .leading, spacing: 12) {
+                    CounterView(text: viewModel.name, layout: .main)
+                    CounterView(text: viewModel.email, layout: .main)
                 }
             }
             .padding(.top, 128)
@@ -65,8 +71,10 @@ struct AccountView: View {
                 }
                 MainButton(text: "LOG OUT", fullWidth: true, fontPalette: .hThree, layout: .logOut) {
                     print("Выйти из аккаунтa")
+                    viewModel.logOutButtonClicked()
                 }
                 Button(action: {
+                    viewModel.deleteAccoountButtonClicked()
                     print("Удалить аккаунт")
                 }, label: {
                     Text("DELETE ACCOUNT")
@@ -83,23 +91,15 @@ struct AccountView: View {
     
 
 #Preview {
-    AccountView(content: .init(id: "1", image: "orange", name: "Kukulaku", email: "xz@gmail.com")) {
-        print("OnboardingView")
-    }
+    AccountScreen(viewModel: .init(id: "1", image: "orange", name: "Kukulaku", email: "xz@gmail.com"))
 }
 
 struct WebView: UIViewRepresentable {
-    // 1
     let url: URL
-
-    
-    // 2
     func makeUIView(context: Context) -> WKWebView {
 
         return WKWebView()
     }
-    
-    // 3
     func updateUIView(_ webView: WKWebView, context: Context) {
 
         let request = URLRequest(url: url)

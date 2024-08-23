@@ -1,5 +1,5 @@
 //
-//  BasketView.swift
+//  BasketScreen.swift
 //  SweetBonanza1
 //
 //  Created by Андрей Сторожко on 14.08.2024.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-// TODO: View -> Screen - for swift ui views, which we use as UIViewController
-struct BasketView: View {
+
+struct BasketScreen: View {
     // MARK: - Setup
     @ObservedObject private var viewModel: BasketViewModel
     
@@ -27,7 +27,7 @@ struct BasketView: View {
                     .scaledToFill()
             )
             .onAppear {
-                viewModel.viewAppear()
+                viewModel.reloadDataSource()
             }
     }
     
@@ -45,7 +45,14 @@ struct BasketView: View {
                 ScrollView(.vertical) {
                     VStack(spacing: 0) {
                         ForEach(viewModel.items, id: \.self) { item in
-                            BasketItemView(content: item)
+                            BasketItemView(content: item) {
+                                viewModel.itemPlusButtonClicked(item: item)
+                            } onMinusTap: {
+                                viewModel.itemMinusButtonClicked(item: item)
+                            } onCloseTap: {
+                                viewModel.itemCloseButtonClicked(item: item)
+                            }
+
                         }
                     }
                     .padding(.vertical, 32)
@@ -106,5 +113,5 @@ struct BasketView: View {
 }
 
 #Preview {
-    BasketView(viewModel: .init(items: [.init(id: "1", image: "plus", title: "shoto tam", subtitle: "123 grn", count: 1)]))
+    BasketScreen(viewModel: .init(items: [.init(id: "1", image: "plus", title: "shoto tam", price: "2", count: 1)]))
 }
